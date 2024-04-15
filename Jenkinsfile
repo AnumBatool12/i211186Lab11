@@ -4,11 +4,13 @@ pipeline {
     stages {
         stage('Step 1: Checkout'){
             steps {
+                sh 'echo checking out'
                 git 'https://github.com/AnumBatool12/i211186Lab11.git'
             }
         }
         stage ('Step 2: Dependency Installation'){
             steps {
+                sh 'echo installing dependencies'
                 sh 'npm install'
             }
         }
