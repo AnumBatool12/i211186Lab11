@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Step 1: Checkout'){
+            steps {
+                git ''
+            }
+        }
+        stage ('Step 2: Dependency Installation'){
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage ('Step 3: Build Docker Image'){
+            steps {
+                sh 'docker build -d frontend-image'
+            }
+        }
+        stage ('Step 4: Run the Docker Image'){
+            steps {
+                sh 'docker run -dp 8080:8080 frontend-image'
+            }
+        }
+        
+        stage('Step 5: Push Docker Image') {
+            steps {
+
+                sh 'docker push frontend-image'
+            }
+        }
+    }
+}
