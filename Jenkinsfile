@@ -23,19 +23,25 @@ pipeline {
         }
         stage ('Build Image'){
             steps{
-                docker.build("${LAB_IMAGE}:latest", ".")
+                script {
+                    docker.build("${LAB_IMAGE}:latest", '.')
+                }
             }
         }
         stage ('Run Image'){
             steps {
-                sh 'docker run -dp 3000:3000 --name lab11-container ${LAB_IMAGE}:latest'
+                script {
+                    sh 'docker run -d -p 3000:3000 --name lab11_container ${LAB_IMAGE}:latest'
+                }
             }
         }
         stage ('Kill Image'){
             steps{
-                sh 'docker stop lab11-container'
-                sh 'docker rm lab11-container'
-                sh 'docker rmi ${LAB_IMAGE}:latest'
+                script {
+                    sh 'docker stop lab11_container || true'
+                    sh 'docker rm lab11_container || true'
+                    sh 'docker rmi ${LAB_IMAGE}:latest || true'
+                }
             }
         }
     }
