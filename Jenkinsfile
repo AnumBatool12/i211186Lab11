@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    enviroment {
+    environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_HUB_USERNAME = "${DOCKER_HUB_CREDENTIALS_USR}"
         DOCKER_HUB_PASSWORD = "${DOCKER_HUB_CREDENTIALS_PSW}"
@@ -23,18 +23,18 @@ pipeline {
         }
         stage ('Build Image'){
             steps{
-                docker.build("${LAB_IMAGE}:latest", "lab11")
+                docker.build("${LAB_IMAGE}:latest", ".")
             }
         }
         stage ('Run Image'){
             steps {
-                sh 'docker run -dp 3000:3000 ${LAB_IMAGE}:latest'
+                sh 'docker run -dp 3000:3000 --name lab11-container ${LAB_IMAGE}:latest'
             }
         }
         stage ('Kill Image'){
             steps{
-                sh 'docker stop ${LAB_IMAGE}:latest'
-                sh 'docker rm ${LAB_IMAGE}:latest'
+                sh 'docker stop lab11-container'
+                sh 'docker rm lab11-container'
                 sh 'docker rmi ${LAB_IMAGE}:latest'
             }
         }
